@@ -1,0 +1,233 @@
+Sub run_dboard()
+
+Application.OnTime "05:03:00", "dboard1"
+
+End Sub
+
+Sub dboard1()
+
+'Open report file
+'Create new columns in right places
+'Drop in formulas
+'Open main dashboard and drop in closed data on one tab, and lock/app data on the other tab
+'Close
+
+Application.DisplayAlerts = False
+
+Dim dash As Workbook
+Set dash = ActiveWorkbook
+Dim dd As Date
+dd = Date
+
+server = "C:\Users\18458\Desktop\Dashboard Reports\"
+server2 = "C:\Users\18458\Desktop\Dashboard Reports\Reports\"
+
+Dim data As Workbook
+Set data = Workbooks.Open(server & "Report.csv")
+
+data.Sheets(1).Rows(4).Delete
+data.Sheets(1).Rows(1).Delete
+data.Sheets(1).Rows(1).Delete
+
+'Ceate necessary columns
+    Columns("G:G").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("J:J").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("L:L").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("P:P").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("AJ:AJ").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("AL:AL").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("AL:AL").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("AR:AR").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("BU:BU").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("BU:BU").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("BU:BU").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("BU:BU").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("BU:BU").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("BU:BU").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("BU:BU").Select
+    Selection.Insert Shift:=xlToRight
+    Columns("BU:BU").Select
+    Selection.Insert Shift:=xlToRight
+
+'Name the columns
+    Range("G1").Value = "Rate Lock monthyear"
+    Range("J1").Value = "Close monthyear"
+    Range("L1").Value = "Disburse monthyear"
+    Range("P1").Value = "Concat Program"
+    Range("AJ1").Value = "Fallout"
+    Range("AL1").Value = "Status monthyear"
+    Range("AM1").Value = "Fallout # Days"
+    Range("AR1").Value = "Hmda monthyear"
+    Range("BU1").Value = "Disclosure to Intent"
+    Range("BV1").Value = "Intent to Submit"
+    Range("BW1").Value = "Submit to Approve"
+    Range("BX1").Value = "Approve to close"
+    Range("BY1").Value = "Intent to Close"
+    Range("BZ1").Value = "Close to Ship"
+    Range("CA1").Value = "Ship to Purchase"
+    Range("CB1").Value = "Additional"
+    Range("CV1").Value = "PA Disc"
+    Range("CW1").Value = "Margin - net credits $"
+    Range("CX1").Value = "Margin - net credits #"
+    Range("CY1").Value = "Avg. days in status"
+    Range("CZ1").Value = "(Investor Price - 100)"
+    Range("DA1").Value = "Credit in Points"
+    Range("DB1").Value = "Margin - net credits #"
+
+'Drop Formulas
+    Dim lr As Long
+    lr = data.Sheets(1).Range("A1", Range("A1").End(xlDown)).Rows.Count
+    'rate lock monthyear
+    Range("G2").Select
+    Range("G2").Formula = "=MONTH(F2)&YEAR(F2)"
+    Range("G2").AutoFill Range("G2:G" & lr)
+    'close monthyear
+    Range("J2").Select
+    Range("J2").Formula = "=IF(I2>=TODAY(),"""",MONTH(I2)&YEAR(I2))"
+    Range("J2").AutoFill Range("J2:J" & lr)
+    'Disburse monthyear
+    Range("L2").Select
+    Range("L2").Formula = "=IF(K2>=TODAY(),"""",MONTH(K2)&YEAR(K2))"
+    Range("L2").AutoFill Range("L2:L" & lr)
+    'Concat Program
+    Range("P2").Select
+    Range("P2").Formula = "=O2&N2"
+    Range("P2").AutoFill Range("P2:P" & lr)
+    'Fallout
+    Range("AJ2").Select
+    Range("AJ2").Formula = "=IF(OR(AI2=""Loan Denied"",AI2=""Loan Withdrawn"", AI2=""Loan Canceled""),""Yes"",""No"")"
+    Range("AJ2").AutoFill Range("AJ2:AJ" & lr)
+    'Status monthyear
+    Range("AL2").Select
+    Range("AL2").Formula = "=MONTH(AK2)&YEAR(AK2)"
+    Range("AL2").AutoFill Range("AL2:AL" & lr)
+    'Fallout Number of Days
+    Range("AM2").Select
+    Range("AM2").Formula = "=IF(IF(AJ2=""Yes"",(AK2-F2),"""")>180,0,IF(AJ2=""Yes"",(AK2-F2),""""))"
+    Range("AM2").AutoFill Range("AM2:AM" & lr)
+    'HMDA monthyear
+    Range("AR2").Select
+    Range("AR2").Formula = "=MONTH(AQ2)&YEAR(AQ2)"
+    Range("AR2").AutoFill Range("AR2:AR" & lr)
+     'Disclosure to Intent
+    Range("BU2").Select
+    Range("BU2").Formula = "=IF(OR((AT2-AP2)>180,(AT2-AP2)<-180,(AT2-AP2)=0),"""",(AT2-AP2))"
+    Range("BU2").AutoFill Range("BU2:BU" & lr)
+     'Intent to Submit
+    Range("BV2").Select
+    Range("BV2").Formula = "=IF(OR((AX2-AT2)>180,(AX2-AT2)<-180,(AX2-AT2)=0),"""",(AX2-AT2))"
+    Range("BV2").AutoFill Range("BV2:BV" & lr)
+     'Submit to Approve
+    Range("BW2").Select
+    Range("BW2").Formula = "=IF(OR((BA2-AX2)>180,(BA2-AX2)<-180,(BA2-AX2)=0),"""",(BA2-AX2))"
+    Range("BW2").AutoFill Range("BW2:BW" & lr)
+     'Approve to Close
+    Range("BX2").Select
+    Range("BX2").Formula = "=IF(OR((I2-BA2)>180,(I2-BA2)<-180,(I2-BA2)=0),"""",(I2-BA2))"
+    Range("BX2").AutoFill Range("BX2:BX" & lr)
+     'Intent to Close
+    Range("BY2").Select
+    Range("BY2").Formula = "=IF(OR((I2-AT2)>180,(I2-AT2)<-180,(I2-AT2)=0),"""",(I2-AT2))"
+    Range("BY2").AutoFill Range("BY2:BY" & lr)
+     'Close to Ship
+    Range("BZ2").Select
+    Range("BZ2").Formula = "=IF(OR((BS2-I2)>180,(BS2-I2)<-180,(BS2-I2)=0),"""",(BS2-I2))"
+    Range("BZ2").AutoFill Range("BZ2:BZ" & lr)
+     'Ship to Purchase
+    Range("CA2").Select
+    Range("CA2").Formula = "=IF(OR((BT2-BS2)>180,(BT2-BS2)<-180,(BT2-BS2)=0),"""",(BT2-BS2))"
+    Range("CA2").AutoFill Range("CA2:CA" & lr)
+     ''Additional
+    'Range("BV2").Select
+    'Range("BV2").Formula = "=IF(OR((AX2-AT2)>180,(AX2-AT2)<-180,(AX2-AT2)=0),"""",(AX2-AT2))"
+    'Range("BV2").AutoFill Range("BV2:BV" & lr)
+     'PA Disc
+    Range("CV2").Select
+    Range("CV2").Formula = "=IF(BT2="""","""",CP2-CO2)"
+    Range("CV2").AutoFill Range("CV2:CV" & lr)
+     'Margin $
+    Range("CW2").Select
+    Range("CW2").Formula = "=(CO2-100)/100*T2+CU2"
+    Range("CW2").AutoFill Range("CW2:CW" & lr)
+     'Margin Points
+    Range("CX2").Select
+    Range("CX2").Formula = "=CW2/T2*100"
+    Range("CX2").AutoFill Range("CX2:CX" & lr)
+     'Average Days in Status
+    Range("CY2").Select
+    Range("CY2").Formula = "=TODAY()-AK2"
+    Range("CY2").AutoFill Range("CY2:CY" & lr)
+     'Investor Price - 100
+    Range("CZ2").Select
+    Range("CZ2").Formula = "=CO2-100"
+    Range("CZ2").AutoFill Range("CZ2:CZ" & lr)
+     'Credits in Points
+    Range("DA2").Select
+    Range("DA2").Formula = "=CU2/T2*100"
+    Range("DA2").AutoFill Range("DA2:DA" & lr)
+     'Margin
+    Range("DB2").Select
+    Range("DB2").Formula = "=IFERROR(CZ2+DA2,"""")"
+    Range("DB2").AutoFill Range("DB2:DB" & lr)
+    
+    
+'Breakout into CData and LData
+''CData is fallout = no, LData is the full data set
+
+'Open Company Dist Base
+Dim base As Workbook
+Set base = Workbooks.Open(server & "CompanyDashboard_Base.xlsx")
+    
+'Copy and paste locked data
+    data.Sheets(1).Activate
+    Rows("1:1").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    base.Sheets("LData").Activate
+    base.Sheets("LData").Select
+    Range("A1").Select
+    ActiveSheet.Paste
+    Application.CutCopyMode = False
+    base.Sheets("LData").Visible = xlSheetHidden
+
+'Copy and paste closed data
+    data.Sheets(1).Activate
+    
+    'Closed Filtering. Rate locked = yes (field3) and Fallout = No (field36)
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$1:$DA$3000").AutoFilter Field:=3, Criteria1:="Yes"
+    ActiveSheet.Range("$A$1:$DA$3000").AutoFilter Field:=36, Criteria1:="No"
+        
+    Rows("1:1").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    base.Sheets("CData").Activate
+    base.Sheets("CData").Select
+    Range("A1").Select
+    ActiveSheet.Paste
+    Application.CutCopyMode = False
+    base.Sheets("CData").Visible = xlSheetHidden
+
+'Close raw data book
+data.Close
+
+'Save Base File in Reports
+base.SaveAs (server2 & "Company Dashboard " & Format(dd, " (mm-dd-yy)") & ".xlsx"), FileFormat:=51
+
+
+End Sub
+
