@@ -1,0 +1,854 @@
+Sub Send_All_Moe()
+
+'Open report file
+server = "C:\Users\18458\Desktop\Dashboard Reports\Moe Emails\"
+server2 = "C:\Users\18458\Desktop\Dashboard Reports\Moe Emails/Moe Email Reports\"
+
+Dim data As Workbook
+Set data = Workbooks.Open(server & "ALL MOE COMMS.csv")
+
+'name columns and drop logic
+
+lastRow = Range("A" & Rows.Count).End(xlUp).Row
+
+'ROARRR EMAIL #1
+Range("CA3").Value = "ROARRRRR - email 1"
+Range("CA5").Select
+Range("CA5").Formula = "=IF(AND(S5<>"""",TODAY()-1=S5), ""Yes"", IF(AND(S5 > WORKDAY(TODAY(),-1), S5 < TODAY()), ""Yes"", IF(AND(S5=WORKDAY(TODAY(),-1)), ""Yes"", ""No"")))"
+Range("CA5").AutoFill Destination:=Range("CA5:CA" & lastRow)
+
+'Sam Logic - EMAIL 2
+Range("CT3").Value = "Sam"
+Range("CT5").Select
+Range("CT5").Formula = "=IF(AND(S5>=WORKDAY(TODAY(),-3), J5 = ""Registered"", H5 = ""Samantha Drossner""),""Yes"", IF(AND(S5>=WORKDAY(TODAY(),-3), J5 = ""Processing"", H5 = ""Samantha Drossner""), ""Yes"", IF(AND(S5>=WORKDAY(TODAY(),-3), J5 = ""Loan Open"", H5 = ""Samantha Drossner""), ""Yes"", IF(AND(S5>=WORKDAY(TODAY(),-3), J5 = ""Submitted"", H5 = ""Samantha Drossner""), ""Yes"",""No""))))"
+Range("CT5").AutoFill Destination:=Range("CT5:CT" & lastRow)
+
+'Deb Logic - EMAIL 2
+Range("CU3").Value = "Deb"
+Range("CU5").Select
+Range("CU5").Formula = "=IF(AND(S5>=WORKDAY(TODAY(),-3), J5 = ""Registered"", H5 = ""Debra Steinberg""),""Yes"", IF(AND(S5>=WORKDAY(TODAY(),-3), J5 = ""Processing"", H5 = ""Debra Steinberg""), ""Yes"", IF(AND(S5>=WORKDAY(TODAY(),-3), J5 = ""Loan Open"", H5 = ""Debra Steinberg""), ""Yes"", IF(AND(S5>=WORKDAY(TODAY(),-3), J5 = ""Submitted"", H5 = ""Debra Steinberg""), ""Yes"",""No""))))"
+Range("CU5").AutoFill Destination:=Range("CU5:CU" & lastRow)
+
+'MM is on the prowl for you #3 = 5 business days from RESPA
+Range("CC3").Value = "On the prowl - email 3"
+Range("CC5").Select
+Range("CC5").Formula = "=IF(AND(S5=WORKDAY(TODAY(),-5), J5 = ""Registered""),""Yes"", IF(AND(S5=WORKDAY(TODAY(),-5), J5 = ""Processing""), ""Yes"", IF(AND(S5=WORKDAY(TODAY(),-5), J5 = ""Loan Open""), ""Yes"", IF(AND(S5=WORKDAY(TODAY(),-5), J5 = ""Pre-qual""), ""Yes"", IF(AND(S5=WORKDAY(TODAY(),-5), J5 = ""Pre-Processing""), ""Yes"", IF(AND(S5=WORKDAY(TODAY(),-5), J5 = ""Document Check Failed""), ""Yes"", IF(AND(S5=WORKDAY(TODAY(),-5), J5 = ""Document Check""), ""Yes"", ""No"")))))))"
+Range("CC5").AutoFill Destination:=Range("CC5:CC" & lastRow)
+
+'Appraiser is calling REFI #4
+Range("CD3").Value = "Keep your ringer on - email 4"
+Range("CD5").Select
+Range("CD5").Formula = "=IF(AND(S5<>"""",V5<>""Purchase"", TODAY()-1=T5),""Yes"", IF(AND(S5<>"""",V5<>""Purchase"", T5 > WORKDAY(TODAY(), -1), T5 < TODAY()), ""Yes"", IF(AND(S5<>"""",V5<>""Purchase"", T5=WORKDAY(TODAY(),-1)), ""Yes"", ""No"")))"
+Range("CD5").AutoFill Destination:=Range("CD5:CD" & lastRow)
+
+'Camera ready PURCHASE  #5
+Range("CE3").Value = "Camera ready purchase - email 5"
+Range("CE5").Select
+Range("CE5").Formula = "=IF(AND(S5<>"""",V5 = ""Purchase"",T5<>DATEVALUE(""1/1/1901""),TODAY()-1=T5),""Yes"", IF(AND(S5<>"""",V5 = ""Purchase"",T5<>DATEVALUE(""1/1/1901""), T5 > WORKDAY(TODAY(),-1), T5 < TODAY()), ""Yes"", IF(AND(T5 = WORKDAY(TODAY(),-1), S5<>"""", V5 = ""Purchase""), ""Yes"", ""No"")))"
+Range("CE5").AutoFill Destination:=Range("CE5:CE" & lastRow)
+
+'Charging forward #6
+Range("CF3").Value = "Charging forward - email 6"
+Range("CF5").Select
+Range("CF5").Formula = "=IF(AND(S5<>"""", TODAY()-1 = N5, J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Suspended"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Cancelled"", J5 <> ""Lead Declined"", J5<> ""Lead Other""), ""Yes"", IF(AND(S5<>"""", N5 > WORKDAY(TODAY(),-1), N5 < TODAY(), J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Suspended"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Cancelled"", J5 <> ""Lead Declined"", J5<> ""Lead Other""), ""Yes"", IF(AND(S5<>"""", N5=WORKDAY(TODAY(),-1), J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Suspended"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Cancelled"", J5 <> ""Lead Declined"", J5<> ""Lead Other""), ""Yes"", ""No"")))"
+Range("CF5").AutoFill Destination:=Range("CF5:CF" & lastRow)
+
+'Cat Nap #7
+Range("CG3").Value = "Cat Nap - email 7"
+Range("CG5").Select
+Range("CG5").Formula = "=IF(AND(S5<>"""", J5 = ""Loan Submitted"", L5 = 20), ""Yes"", IF(AND(S5<>"""", J5=""Loan Submitted"", L5=21, K5 + 21 > WORKDAY(TODAY(),-1)), ""Yes"", IF(AND(S5<>"""", J5=""Loan Submitted"", L5=22, K5 + 22 > WORKDAY(TODAY(),-1)), ""Yes"", ""No"")))"
+Range("CG5").AutoFill Destination:=Range("CG5:CG" & lastRow)
+
+'MIGHTY MOVES #8
+Range("CH3").Value = "MIGHTY MOVES - email 8"
+Range("CH5").Select
+Range("CH5").Formula = "=IF(AND(S5<>"""", J5 = ""Loan Submitted"", L5 = 40), ""Yes"", IF(AND(S5<>"""", J5=""Loan Submitted"", L5=41, K5 + 41 > WORKDAY(TODAY(),-1)), ""Yes"", IF(AND(S5<>"""", J5=""Loan Submitted"", L5=42, K5 + 42 > WORKDAY(TODAY(),-1)), ""Yes"", ""No"")))"
+Range("CH5").AutoFill Destination:=Range("CH5:CH" & lastRow)
+
+'King of Jungle #9
+Range("CI3").Value = "King of Jungle - email 9"
+Range("CI5").Select
+Range("CI5").Formula = "=IF(AND(S5<>"""", J5 = ""Approved"", L5=1), ""Yes"", IF(AND(S5<>"""", J5=""Approved"", L5 = 3, K5 = WORKDAY(TODAY(),-1)), ""Yes"", ""No""))"
+Range("CI5").AutoFill Destination:=Range("CI5:CI" & lastRow)
+
+'REMINDERRRR #10
+Range("CJ3").Value = "REMINDERRRR - email 10"
+Range("CJ5").Select
+Range("CJ5").Formula = "=IF(AND(Q5=WORKDAY(TODAY(),14), S5<>"""", V5 = ""Purchase"", J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Suspended"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Cancelled"", J5 <> ""Lead Declined"", J5<> ""Lead Other""), ""Yes"", ""No"")"
+Range("CJ5").AutoFill Destination:=Range("CJ5:CJ" & lastRow)
+
+'AUTOGRAPH #11
+Range("CK3").Value = "AUTOGRAPH - email 11"
+Range("CK5").Select
+Range("CK5").Formula = "=IF(AND(S5<>"""", P5 = TODAY()-1, J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Suspended"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Canceled"", J5 <> ""Lead Denied"", J5 <> ""Lead Other""), ""Yes"", IF(AND(S5<>"""", P5 > WORKDAY(TODAY(),-1), P5 < TODAY(), J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Suspended"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Canceled"", J5 <> ""Lead Denied"", J5 <> ""Lead Other""), ""Yes"", IF(AND(S5<>"""", P5 = WORKDAY(TODAY(),-1), J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Suspended"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Canceled"", J5 <> ""Lead Denied"", J5 <> ""Lead Other""), ""Yes"", ""No"")))"
+Range("CK5").AutoFill Destination:=Range("CK5:CK" & lastRow)
+
+'SCRATCH CLOSE WEEKDAY #12
+Range("CL3").Value = "SCRATCH CLOSE WEEKDAY - email 12"
+Range("CL5").Select
+Range("CL5").Formula = "=IF(AND(S5<>"""",Q5 = TODAY(), J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Suspended"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Canceled"", J5 <> ""Lead Denied"", J5 <> ""Lead Other""), ""Yes"",""No"")"
+Range("CL5").AutoFill Destination:=Range("CL5:CL" & lastRow)
+
+'SCRATCH CLOSE WEEKEND #13
+Range("CM3").Value = "SCRATCH CLOSE WEEKEND - email 13"
+Range("CM5").Select
+Range("CM5").Formula = "=IF(AND(S5<>"""",Q5 > TODAY(), Q5 < WORKDAY(TODAY(),1), J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Suspended"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Canceled"", J5 <> ""Lead Denied"", J5 <> ""Lead Other""), ""Yes"",""No"")"
+Range("CM5").AutoFill Destination:=Range("CM5:CM" & lastRow)
+
+'PAYMENT QUESTIONS WEEKDAY #14
+
+Range("CN3").Value = "PAYMENT WEEKDAY - email 14"
+Range("CN5").Select
+Range("CN5").Formula = "=IF(AND(S5<>"""", Q5=WORKDAY(TODAY(),-2), J5 <> ""Loan Denied""), ""Yes"", IF(AND(S5<>"""", Q5=WORKDAY(TODAY(),-2), J5 <>""Loan Canceled""), ""Yes"", IF(AND(S5<>"""", Q5=WORKDAY(TODAY(),-2), J5 <> ""Loan Suspended""), ""Yes"", IF(AND(S5<>"""", Q5=WORKDAY(TODAY(),-2), J5 <> ""Loan Withdrawn""), ""Yes"",IF(AND(S5<>"""", Q5=WORKDAY(TODAY(),-2), J5 <> ""Loan Archived""), ""Yes"", IF(AND(S5<>"""", Q5=WORKDAY(TODAY(),-2), J5 <> ""Lead New""), ""Yes"", IF(AND(S5<>"""", Q5=WORKDAY(TODAY(),-2), J5 <> ""Lead Canceled""), ""Yes"", IF(AND(S5<>"""", Q5=WORKDAY(TODAY(),-2), J5 <> ""Lead Denied""), ""Yes"", IF(AND(S5<>"""", Q5=WORKDAY(TODAY(),-2), J5 <> ""Lead Other""), ""Yes"" ,""No"")))))))))"
+Range("CN5").AutoFill Destination:=Range("CN5:CN" & lastRow)
+
+'PAYMENT QUESTIONS WEEKEND #15
+Range("CO3").Value = "PAYMENT WEEKEND - email 15"
+Range("CO5").Select
+Range("CO5").Formula = "=IF(AND(S5<>"""", Q5 > WORKDAY(TODAY(),-1), Q5 < TODAY(), J5 <> ""Loan Denied""), ""Yes"", IF(AND(S5<>"""", Q5 > WORKDAY(TODAY(),-1), Q5 < TODAY(), J5 <>""Loan Canceled""), ""Yes"", IF(AND(S5<>"""", Q5 > WORKDAY(TODAY(),-1), Q5 < TODAY(), J5 <> ""Loan Suspended""), ""Yes"", IF(AND(S5<>"""", Q5 > WORKDAY(TODAY(),-1), Q5 < TODAY(), J5 <> ""Loan Withdrawn""), ""Yes"",IF(AND(S5<>"""", Q5 > WORKDAY(TODAY(),-1), Q5 < TODAY(), J5 <> ""Loan Archived""), ""Yes"", IF(AND(S5<>"""", Q5 > WORKDAY(TODAY(),-1), Q5 < TODAY(), J5 <> ""Lead New""), ""Yes"", IF(AND(S5<>"""", Q5 > WORKDAY(TODAY(),-1), Q5 < TODAY(), J5 <> ""Lead Canceled""), ""Yes"", IF(AND(S5<>"""", Q5 > WORKDAY(TODAY(),-1), Q5 < TODAY(), J5 <> ""Lead Denied""), ""Yes"", IF(AND(S5<>"""", Q5 > WORKDAY(TODAY(),-1), Q5 < TODAY(), J5 <> ""Lead Other""), ""Yes"" ,""No"")))))))))"
+'Range("CO5").Formula = "=IF(AND(S5<>"""", Q5 > WORKDAY(TODAY(),-1), Q5 < TODAY(), J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Suspended"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Canceled"", J5 <> ""Lead Denied"", J5 <> ""Lead Other""), ""Yes"",""No"")"
+Range("CO5").AutoFill Destination:=Range("CO5:CO" & lastRow)
+
+'PRIDE WEEKDAY #16
+Range("CP3").Value = "PRIDE WEEKDAY - email 16"
+Range("CP5").Select
+Range("CP5").Formula = "=IF(AND(S5<>"""",Q5 = WORKDAY(TODAY(),-7), J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Suspended"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Canceled"", J5 <> ""Lead Denied"", J5 <> ""Lead Other""), ""Yes"",""No"")"
+Range("CP5").AutoFill Destination:=Range("CP5:CP" & lastRow)
+
+'PRIDE WEEKEND #17
+Range("CQ3").Value = "PRIDE WEEKEND - email 17"
+Range("CQ5").Select
+Range("CQ5").Formula = "=IF(AND(S5<>"""", Q5 > WORKDAY(TODAY(),-6), Q5 < WORKDAY(TODAY(),-5),  J5 <> ""Loan Denied"", J5 <> ""Loan Canceled"", J5 <> ""Loan Suspended"", J5 <> ""Loan Withdrawn"", J5 <> ""Loan Archived"", J5 <> ""Lead New"", J5 <> ""Lead Canceled"", J5 <> ""Lead Denied"", J5 <> ""Lead Other""), ""Yes"",""No"")"
+Range("CQ5").AutoFill Destination:=Range("CQ5:CQ" & lastRow)
+
+'BIRTHDAY - email 18 -- NOT FINISHED
+Range("CR3").Value = "BIRTHDAY - email 18"
+Range("CR5").Select
+Range("CR5").Formula = "=IF(AND(W5 = TODAY() + 5, J5 = ""Investor Conditions""), ""Yes"", IF(AND(W5 =TODAY() + 5, J5 = ""Loan Shipped""), ""Yes"", IF(AND(W5 =TODAY() + 5, J5 = ""Loan Sold""), ""Yes"", IF(AND(W5 =TODAY() + 5, J5 = ""Loan Closed""), ""Yes"", IF(AND(W5=TODAY(), J5 =""Investor Conditions""), ""Yes"", IF(AND(W5=TODAY(), J5 = ""Loan Shipped""), ""Yes"", IF(AND(W5 = TODAY(), J5 = ""Loan Sold""), ""Yes"", IF(AND(W5=TODAY(), J5 = ""Loan Closed""), ""Yes"", ""No""))))))))"
+Range("CR5").AutoFill Destination:=Range("CR5:CR" & lastRow)
+
+'CO-BIRTHDAY - EMAIL 19 NOT FINISHED
+Range("CS3").Value = "CO-BIRTHDAY - email 19"
+Range("CS5").Select
+Range("CS5").Formula = "=IF(AND(X5 = TODAY() + 5, J5 = ""Investor Conditions""), ""Yes"", IF(AND(X5 =TODAY() + 5, J5 = ""Loan Shipped""), ""Yes"", IF(AND(X5 =TODAY() + 5, J5 = ""Loan Sold""), ""Yes"", IF(AND(X5 =TODAY() + 5, J5 = ""Loan Closed""), ""Yes"", IF(AND(X5=TODAY(), J5 =""Investor Conditions""), ""Yes"", IF(AND(X5=TODAY(), J5 = ""Loan Shipped""), ""Yes"", IF(AND(X5 = TODAY(), J5 = ""Loan Sold""), ""Yes"", IF(AND(X5=TODAY(), J5 = ""Loan Closed""), ""Yes"", ""No""))))))))"
+Range("CS5").AutoFill Destination:=Range("CS5:CS" & lastRow)
+
+'CopyPasteData Macro will copy and paste data into new sheet so we can run specific email code
+
+Dim ws As Worksheet
+Dim newWs As Worksheet
+Dim sheetNames As Variant
+Dim iii As Integer
+
+sheetNames = Array("ROARRRRR - email 1", "Human Friend - email 2", "On the prowl - email 3", "Sam", "Deb", "Keep your ringer on - email 4", "Camera ready purchase - email 5", "Charging forward - email 6", "Cat Nap - email 7", "MIGHTY MOVES - email 8", "King of Jungle - email 9", "REMINDERRRR - email 10", "AUTOGRAPH - email 11", "CLOSE WEEKDAY - email 12", "CLOSE WEEKEND - email 13", "PAYMENT WEEKDAY - email 14", "PAYMENT WEEKEND - email 15", "PRIDE WEEKDAY - email 16", "PRIDE WEEKEND - email 17", "BIRTHDAY - email 18", "CO-BIRTHDAY - email 19")
+
+Set ws = ActiveSheet
+ws.Activate
+
+For iii = LBound(sheetNames) To UBound(sheetNames)
+Set newWs = Workbooks("ALL MOE COMMS.csv").Sheets.Add(After:=Workbooks("ALL MOE COMMS.csv").Sheets(Workbooks("ALL MOE COMMS.csv").Sheets.Count)) 'create a new worksheet
+newWs.Name = sheetNames(iii) 'rename the new worksheet with the current name in the loop
+
+ws.Cells.Copy
+newWs.Range("A1").PasteSpecial
+
+Next iii
+    
+'Worksheet Breakout Over -> Time to filter by "Yes"
+
+'Filter respective worksheet by "Yes" to finalize our email population
+    
+'Select ROARRRRR - email 1 worksheet and filter out "NO"
+    Sheets("ROARRRRR - email 1").Select
+    Columns("CB:CU").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select On the prowl - email 3 worksheet and filter out "NO"
+    Sheets("On the prowl - email 3").Select
+    Columns("CA:CB").EntireColumn.Delete
+    Columns("CB:CS").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select Keep your ringer on - email 4 worksheet and filter out "NO"
+    Sheets("Keep your ringer on - email 4").Select
+    Columns("CA:CC").EntireColumn.Delete
+    Columns("CB:CR").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select Camera ready purchase - email 5 worksheet and filter out "NO"
+    Sheets("Camera ready purchase - email 5").Select
+    Columns("CA:CD").EntireColumn.Delete
+    Columns("CB:CQ").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select Charging forward - email 6 worksheet and filter out "NO"
+    Sheets("Charging forward - email 6").Select
+    Columns("CA:CE").EntireColumn.Delete
+    Columns("CB:CP").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select Cat Nap - email 7 worksheet and filter out "NO"
+    Sheets("Cat Nap - email 7").Select
+    Columns("CA:CF").EntireColumn.Delete
+    Columns("CB:CO").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select MIGHTY MOVES - email 8 worksheet and filter out "NO"
+    Sheets("MIGHTY MOVES - email 8").Select
+    Columns("CA:CG").EntireColumn.Delete
+    Columns("CB:CN").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select King of Jungle - email 9 worksheet and filter out "NO"
+    Sheets("King of Jungle - email 9").Select
+    Columns("CA:CH").EntireColumn.Delete
+    Columns("CB:CM").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select REMINDERRRR - email 10 worksheet and filter out "NO"
+    Sheets("REMINDERRRR - email 10").Select
+    Columns("CA:CI").EntireColumn.Delete
+    Columns("CB:CL").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select AUTOGRAPH - email 11 worksheet and filter out "NO"
+    Sheets("AUTOGRAPH - email 11").Select
+    Columns("CA:CJ").EntireColumn.Delete
+    Columns("CB:CK").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select CLOSE WEEKDAY - email 12 worksheet and filter out "NO"
+    Sheets("CLOSE WEEKDAY - email 12").Select
+    Columns("CA:CK").EntireColumn.Delete
+    Columns("CB:CJ").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select CLOSE WEEKEND - email 13 worksheet and filter out "NO"
+    Sheets("CLOSE WEEKEND - email 13").Select
+    Columns("CA:CL").EntireColumn.Delete
+    Columns("CB:CI").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select PAYMENT WEEKDAY - email 14 worksheet and filter out "NO"
+    Sheets("PAYMENT WEEKDAY - email 14").Select
+    Columns("CA:CM").EntireColumn.Delete
+    Columns("CB:CH").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select PAYMENT WEEKEND - email 15 worksheet and filter out "NO"
+    Sheets("PAYMENT WEEKEND - email 15").Select
+    Columns("CA:CN").EntireColumn.Delete
+    Columns("CB:CG").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select PRIDE WEEKDAY - email 16 worksheet and filter out "NO"
+    Sheets("PRIDE WEEKDAY - email 16").Select
+    Columns("CA:CO").EntireColumn.Delete
+    Columns("CB:CF").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select PRIDE WEEKEND - email 17 worksheet and filter out "NO"
+    Sheets("PRIDE WEEKEND - email 17").Select
+    Columns("CA:CP").EntireColumn.Delete
+    Columns("CB:CE").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select BIRTHDAY - email 18 worksheet and filter out "NO"
+    Sheets("BIRTHDAY - email 18").Select
+    Columns("CA:CQ").EntireColumn.Delete
+    Columns("CB:CD").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select CO-BIRTHDAY - email 19 worksheet and filter out "NO"
+    Sheets("CO-BIRTHDAY - email 19").Select
+    Columns("CA:CR").EntireColumn.Delete
+    Columns("CB:CC").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Select Sam worksheet and filter out "Debra Steinberg"
+    Sheets("Sam").Select
+    Columns("CA:CS").EntireColumn.Delete
+    Columns("CB").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+
+'Select Deb worksheet and filter out "Samantha Drossner"
+    Sheets("Deb").Select
+    Columns("CA:CT").EntireColumn.Delete
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=79, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    ActiveSheet.ShowAllData
+    Rows("4:4").Delete
+    
+'Open emojis workbook and copy/paste them as last page
+    
+server3 = "C:\Users\18458\Desktop\Dashboard Reports\Moe Emails\"
+
+Dim Emoji As Workbook
+Set Emoji = Workbooks.Open(server3 & "Emojis.xlsx")
+Sheets("Emojis").Copy Before:=Workbooks("ALL MOE COMMS.csv").Sheets(1)
+
+Workbooks("ALL MOE COMMS.csv").Activate
+Worksheets("Emojis").Activate
+Range("A1:A10").Select
+Selection.Copy
+
+For ppp = 0 To UBound(sheetNames)
+Worksheets(sheetNames(ppp)).Activate
+Range("AL1").PasteSpecial
+
+Next ppp
+
+'Email loops
+
+'Prepare ROARRRRR - email 1
+    Sheets("ROARRRRR - email 1").Select
+    Dim i As Integer, Mail_Object, Email_Subject, o As Variant, lr As Long
+    Set Mail_Object = CreateObject("Outlook.Application")
+    
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Skip
+     End If
+    
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "ROARRRR  MortgageCountry Moe is here! " & Range("AL1")
+            .bcc = Range("A100")
+            .body = "DELETE THIS AND SEND THE ROARRRR  MortgageCountry Moe is here! EMAIL"
+            .display
+
+    End With
+
+Skip:
+    
+
+    'Prepare Sam Email
+    
+    Sheets("Sam").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+    If myNum = "" Then
+     GoTo Pass
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Meet my human friend " & Range("AL6")
+            .bcc = Range("A100")
+            .body = "DELETE THIS AND SEND THE MEET MY HUMAN FRIEND EMAIL FOR SAMMMMMMMMMM"
+            .display
+    
+    End With
+    
+Pass:
+  
+'Prepare Deb Email
+    
+    Sheets("Deb").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+    If myNum = "" Then
+     GoTo Trass
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Meet my human friend " & Range("AL6")
+            .bcc = Range("A100")
+            .body = "DELETE THIS AND SEND THE MEET MY HUMAN FRIEND EMAIL FOR DEBBBBBBBBBB"
+            .display
+    
+    End With
+    
+Trass:
+      
+'Prepare On the prowl - email 3
+    Sheets("On the prowl - email 3").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo NA
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Mortgage Moe is on the prowl for YOU!" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "DELETE THIS AND SEND THE Mortgage Moe is on the prowl for YOU!"
+            .display
+    
+    End With
+NA:
+    
+'Prepare Keep your ringer on - email 4
+    Sheets("Keep your ringer on - email 4").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Passed
+     End If
+     
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Moe's UPDATE - keep your ringer ON" & Range("AL9") & " your appraiser is calling" & Range("AL10")
+            .bcc = Range("A100")
+            .body = "DELETE THIS AND SEND THE Moe s UPDATE   keep your ringer ON!"
+            .display
+
+    End With
+    
+Passed:
+       
+'Prepare Camera ready purchase - email 5
+    Sheets("Camera ready purchase - email 5").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Other
+     End If
+     
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Moe's UPDATE - your new home is getting camera ready! " & Range("AL7")
+            .bcc = Range("A100")
+            .body = "DELETE THIS AND SEND THE Moe s UPDATE   your new home is getting camera ready!"
+            .display
+    
+    End With
+
+Other:
+    
+'Prepare Charging forward - email 6
+    Sheets("Charging forward - email 6").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Otro
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Mortgage Moe UPDATE - your loan is charging forward!" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "DELETE THIS AND SEND Mortgage Moe UPDATE- your loan is charging forward!"
+            .display
+    
+    End With
+
+Otro:
+    
+'Prepare Cat Nap - email 7
+    Sheets("Cat Nap - email 7").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Pasar
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Take a CAT NAP, loan status = in review" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "DELETE THIS AND SEND Take a CAT NAP, loan status = in review!"
+            .display
+    
+    End With
+    
+Pasar:
+        
+'Prepare MIGHTY MOVES - email 8
+    Sheets("MIGHTY MOVES - email 8").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Moose
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Your loan is making MIGHTY MOVES" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "DELETE THIS AND SEND Your loan is making MIGHTY MOVES!"
+            .display
+    
+    End With
+
+Moose:
+    
+'Prepare King of Jungle - email 9
+    Sheets("King of Jungle - email 9").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Goose
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "You're the king of the jungle!" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "DELETE THIS AND SEND King of Jungle - email 9!"
+            .display
+    
+    End With
+
+Goose:
+    
+'Prepare REMINDERRRR - email 10
+   Sheets("REMINDERRRR - email 10").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Roost
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Mortgage Moe REMINDERRRRRR. Sorry for roaring!" & Range("AL1")
+        .bcc = Range("A100")
+        .body = "DELETE THIS AND SEND REMINDERRRR - email 10!"
+        .display
+    
+    End With
+    
+Roost:
+
+'Prepare AUTOGRAPH - email 11
+    Sheets("AUTOGRAPH - email 11").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Boost
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Can I have your autograph?" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "DELETE THIS AND AUTOGRAPH - email 11"
+            .display
+    
+    End With
+    
+Boost:
+    
+'Prepare CLOSE WEEKDAY - email 12
+    Sheets("CLOSE WEEKDAY - email 12").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Flute
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "SCRATCH, SCRATCH - Time to Close with Moe!" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "CLOSE WEEKDAY - email 12"
+            .display
+    
+    End With
+    
+Flute:
+    
+'Prepare CLOSE WEEKEND - email 13
+    Sheets("CLOSE WEEKEND - email 13").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Brute
+     End If
+     
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "SCRATCH, SCRATCH - Time to Close with Moe!" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "CLOSE WEEKEND - email 13"
+            .display
+    
+    End With
+    
+Brute:
+    
+'Prepare PAYMENT WEEKDAY - email 14
+    Sheets("PAYMENT WEEKDAY - email 14").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Mute
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Payment Questions? Moe's got answers!" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "PAYMENT WEEKDAY - email 14"
+            .display
+    
+    End With
+
+Mute:
+
+'Prepare PAYMENT WEEKEND - email 15
+    Sheets("PAYMENT WEEKEND - email 15").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Loot
+     End If
+        
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Payment Questions? Moe's got answers!" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "PAYMENT WEEKEND - email 15"
+            .display
+    
+    End With
+    
+Loot:
+    
+'Prepare PRIDE WEEKDAY - email 16
+    Sheets("PRIDE WEEKDAY - email 16").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Boot
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "MortgageCountry Moe Pride" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "PRIDE WEEKDAY - email 16"
+            .display
+    
+    End With
+
+Boot:
+    
+'Prepare PRIDE WEEKEND - email 17
+    Sheets("PRIDE WEEKEND - email 17").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Fruit
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "MortgageCountry Moe Pride" & Range("AL1")
+            .bcc = Range("A100")
+            .body = "PRIDE WEEKEND - email 17"
+            .display
+    
+    End With
+    
+Fruit:
+
+'Prepare BIRTHDAY - email 18
+    Sheets("BIRTHDAY - email 18").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,F4:F100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Moot
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Sending party animal vibes" & Range("AL8")
+            .bcc = Range("A100")
+            .body = "BIRTHDAY - email 18"
+            .display
+    
+    End With
+   
+Moot:
+    
+'Prepare CO-BIRTHDAY - email 19
+    Sheets("CO-BIRTHDAY - email 19").Select
+    Range("A100").Select
+    Range("A100").Formula = "=TEXTJOIN("";"",TRUE,G4:G100)"
+    myNum = Range("A100")
+    
+     If myNum = "" Then
+     GoTo Cute
+     End If
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Sending party animal vibes" & Range("AL8")
+            .bcc = Range("A100")
+            .body = "CO-BIRTHDAY - email 19"
+            .display
+    
+    End With
+    
+Cute:
+
+    Dim dd As Date
+    dd = Date
+
+data.SaveAs (server2 & "Mortgage Moe Emails " & Format(dd, " (mm-dd-yy)") & ".xlsx"), FileFormat:=51
+
+Workbooks("Emojis.xlsx").Close savechanges:=False
+    
+End Sub
+
+
