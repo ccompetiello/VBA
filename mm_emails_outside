@@ -1,0 +1,331 @@
+Sub SendEm()
+
+'Open report file
+server = "C:\Users\18458\Desktop\Dashboard Reports\Moe Emails\"
+server2 = "C:\Users\18458\Desktop\Dashboard Reports\Moe Emails/Moe Email Reports\"
+
+Dim data As Workbook
+Set data = Workbooks.Open(server & "RawData.csv")
+
+'name columns and drop logic
+
+lastrow = Range("A" & Rows.Count).End(xlUp).Row
+
+'Meet Moe
+
+Range("X3").Value = "Meet Moe"
+Range("X5").Select
+Range("X5").Formula = "=IF(AND(G5<>"""",TODAY()-1=G5, D5 = ""Registered""), ""Yes"", IF(AND(G5<>"""",TODAY()-1=G5, D5 = ""Processing""), ""Yes"", IF(AND(G5<>"""",TODAY()-1=G5, D5 = ""Loan Submitted""), ""Yes"", IF(AND(G5 > WORKDAY(TODAY(),-1), G5 < TODAY(), D5 = ""Registered""), ""Yes"", IF(AND(G5 > WORKDAY(TODAY(),-1), G5 < TODAY(), D5 = ""Processing""), ""Yes"", IF(AND(G5 > WORKDAY(TODAY(),-1), G5 < TODAY(), D5 = ""Loan Submitted""), ""Yes"", IF(AND(G5 = WORKDAY(TODAY(),-1), D5 = ""Registered""), ""Yes"",  IF(AND(G5 = WORKDAY(TODAY(),-1), D5 = ""Processing""), ""Yes"",  IF(AND(G5 = WORKDAY(TODAY(),-1), D5 = ""Loan Submitted""), ""Yes"",""No"")))))))))"
+Range("X5").AutoFill Destination:=Range("X5:X" & lastrow)
+
+'then run logic for appraisal ordered
+
+Range("Y3").Value = "Appraisal Has Been Ordered"
+Range("Y5").Select
+Range("Y5").Formula = "=IF(AND(G5<>(""""),I5<>(""""),J5=(""""),TODAY()-1=I5),""Yes"", IF(AND(I5 > WORKDAY(TODAY(), -1), I5 < TODAY()), ""Yes"", IF(AND(I5 = WORKDAY(TODAY(),-1)), ""Yes"", ""No"")))"
+Range("Y5").AutoFill Destination:=Range("Y5:Y" & lastrow)
+
+'then run logic for appraisal back
+
+Range("Z3").Value = "Appraisal Has Been Received"
+Range("Z5").Select
+Range("Z5").Formula = "=IF(AND(G5<>(""""),J5<>(""""),TODAY()-1=J5), ""Yes"",  IF(AND(J5 > WORKDAY(TODAY(),-1), J5 < TODAY()), ""Yes"", IF(AND(J5 = WORKDAY(TODAY(),-1)), ""Yes"", ""No"")))"
+Range("Z5").AutoFill Destination:=Range("Z5:Z" & lastrow)
+
+'APPRAISAL IS WAIVED******
+
+Range("AC3").Value = "Appraisal WAIVED"
+Range("AC5").Select
+Range("AC5").Formula = "=IF(AND(G5<>(""""),J5=DATEVALUE(""1/1/1901""),K5=(""""),TODAY()-1=O5),""Yes"", IF(AND(G5<>(""""), J5=DATEVALUE(""1/1/1901""),K5=(""""), O5 >WORKDAY(TODAY(),-1), O5 < TODAY()), ""Yes"", IF(AND(G5<>(""""),J5=DATEVALUE(""1/1/1901""), K5=(""""),O5 = WORKDAY(TODAY(),-1)), ""Yes"", ""No"")))"
+Range("AC5").AutoFill Destination:=Range("AC5:AC" & lastrow)
+
+'then run logic for cd out
+
+Range("AA3").Value = "Closing Disclosure is sent"
+Range("AA5").Select
+Range("AA5").Formula = "=IF(AND(G5<>(""""),K5<>(""""),TODAY()-1=K5),""Yes"", IF(AND(K5 > WORKDAY(TODAY(),-1), K5 < TODAY()), ""Yes"", IF(AND(K5 = WORKDAY(TODAY(),-1)), ""Yes"", ""No"")))"
+Range("AA5").AutoFill Destination:=Range("AA5:AA" & lastrow)
+
+'then run logic for share the love
+
+Range("AB3").Value = "Share the Love Email"
+Range("AB5").Select
+Range("AB5").Formula = "=IF(AND(G5<>(""""),M5<>(""""),TODAY()-1=M5),""Yes"", IF(AND(M5 > WORKDAY(TODAY(),-1), M5 < TODAY()), ""Yes"", IF(AND(M5 = WORKDAY(TODAY(),-1)), ""Yes"", ""No"")))"
+Range("AB5").AutoFill Destination:=Range("AB5:AB" & lastrow)
+
+
+'Meet Moe Breakout
+    Cells.Select
+    Selection.Copy
+    Sheets.Add After:=ActiveSheet
+    ActiveSheet.PasteSpecial
+    Paste = Values
+    ActiveSheet.Name = "Meet Moe"
+    Application.CutCopyMode = False
+    
+'Appraisal has been ordered breakout
+    Cells.Select
+    Selection.Copy
+    Sheets.Add After:=ActiveSheet
+    ActiveSheet.PasteSpecial
+    Paste = Values
+    ActiveSheet.Name = "Appraisal Ordered"
+    Application.CutCopyMode = False
+
+'Appraisal is back breakout
+    Cells.Select
+    Selection.Copy
+    Sheets.Add After:=ActiveSheet
+    ActiveSheet.PasteSpecial
+    Paste = Values
+    ActiveSheet.Name = "Appraisal Back"
+    Application.CutCopyMode = False
+    
+'Appraisal Waiver breakout
+    Cells.Select
+    Selection.Copy
+    Sheets.Add After:=ActiveSheet
+    ActiveSheet.PasteSpecial
+    Paste = Values
+    ActiveSheet.Name = "Appraisal WAIVED"
+    Application.CutCopyMode = False
+
+'Closing disclosure sent breakout
+    Cells.Select
+    Selection.Copy
+    Sheets.Add After:=ActiveSheet
+    ActiveSheet.PasteSpecial
+    Paste = Values
+    ActiveSheet.Name = "Closing disclosure sent"
+    Application.CutCopyMode = False
+
+'Share the love breakout
+    Cells.Select
+    Selection.Copy
+    Sheets.Add After:=ActiveSheet
+    ActiveSheet.PasteSpecial
+    Paste = Values
+    ActiveSheet.Name = "Share the love"
+    Application.CutCopyMode = False
+    
+'Select Meet Moe worksheet and filter out "NO"
+    Sheets("Meet Moe").Select
+    Columns("Y:AC").EntireColumn.Delete
+    Range("X3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=24, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+
+'Select Appraisal Ordered and filter out "No"
+
+  Sheets("Appraisal Ordered").Select
+    Columns("Z:AC").EntireColumn.Delete
+    Columns("X:X").EntireColumn.Delete
+    Range("X3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=24, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    
+'Select Appraisal Back and filter out "No"
+
+  Sheets("Appraisal Back").Select
+    Columns("AA:AC").EntireColumn.Delete
+    Columns("X:Y").EntireColumn.Delete
+    Range("X3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=24, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    
+'Select Appraisal Waived and filter out "No"
+
+  Sheets("Appraisal WAIVED").Select
+    Columns("X:AB").EntireColumn.Delete
+    Range("X3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=24, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    
+'Select Closing Disclosure and filter out "No"
+
+  Sheets("Closing disclosure sent").Select
+    Columns("X:Z").EntireColumn.Delete
+    Columns("Y:Z").EntireColumn.Delete
+    Range("X3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=24, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    
+'Select Shaare the love and filter out "No"
+
+  Sheets("Share the love").Select
+    Columns("X:AA").EntireColumn.Delete
+    Columns("Y:Y").EntireColumn.Delete
+    Range("X3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$5:$DA$3000").AutoFilter Field:=24, Criteria1:="No"
+    Rows("4:4").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Delete
+    
+Range("A1").Select
+
+'Open BE PT and copy/paste into rawdata
+server3 = "C:\Users\18458\Desktop\Dashboard Reports\Moe Emails\"
+
+Dim Emoji As Workbook
+Set Emoji = Workbooks.Open(server3 & "Emojis.xlsx")
+Sheets("Emojis").Copy Before:=Workbooks("RawData.csv").Sheets(1)
+
+'For Meet Moe
+Sheets("Emojis").Select
+Range("A1:A5").Copy
+Worksheets("Meet Moe").Range("AL1").PasteSpecial
+
+'For Apprisal Ordered
+Sheets("Emojis").Select
+Range("A1:A5").Copy
+Worksheets("Appraisal Ordered").Range("AL1").PasteSpecial
+
+'For Appraisal Back
+Sheets("Emojis").Select
+Range("A1:A5").Copy
+Worksheets("Appraisal Back").Range("AL1").PasteSpecial
+
+'For Appraisal Waived
+Sheets("Emojis").Select
+Range("A1:A5").Copy
+Worksheets("Appraisal WAIVED").Range("AL1").PasteSpecial
+
+'For Closing Disclosures
+Sheets("Emojis").Select
+Range("A1:A5").Copy
+Worksheets("Closing Disclosure sent").Range("AL1").PasteSpecial
+
+'For Share the love
+Sheets("Emojis").Select
+Range("A1:A5").Copy
+Worksheets("Share the love").Range("AL1").PasteSpecial
+
+
+'Email loops
+
+Sheets("Meet Moe").Select
+
+Dim i As Integer, Mail_Object, Email_Subject, o As Variant, lr As Long
+lr = Cells(Rows.Count, "A").End(xlUp).Row
+Set Mail_Object = CreateObject("Outlook.Application")
+For i = 4 To lr
+
+'"Meet Moe Email
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "ROARRRR– MortgageCountry Moe is here!" & Range("AL1") & " - " & Range("C" & i).Value
+            .To = Range("T" & i).Value & ";" & Range("P" & i)
+            .cc = Range("W" & i)
+            .body = "DELETE THIS AND SEND THE MEET MOE EMAIL"
+            .display
+    
+    End With
+    Next i
+    
+'Appraisal Ordered Email
+    
+    Sheets("Appraisal Ordered").Select
+    Dim qr As Long
+    qr = Cells(Rows.Count, "A").End(xlUp).Row
+    For x = 4 To qr
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Moe’s UPDATE: appraisal is a GO!" & Range("AL3") & " - " & Range("C" & x).Value
+            .To = Range("T" & x).Value & ";" & Range("P" & x)
+            .cc = Range("W" & x)
+            .body = "DELETE THIS AND SEND THE APPRAISAL ORDERED EMAIL "
+            .display
+            
+        End With
+        Next x
+        
+        
+'Appraisal is back email
+         
+            Sheets("Appraisal Back").Select
+            Dim tr As Long
+            tr = Cells(Rows.Count, "A").End(xlUp).Row
+            For y = 4 To tr
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Moe’s UPDATE – appraisal = complete!" & Range("AL4") & " - " & Range("C" & y).Value
+            .To = Range("T" & y).Value & ";" & Range("P" & y)
+            .cc = Range("W" & y)
+            .body = "DELETE THIS AND SEND THE APPRAISAL BACK EMAIL"
+            .display
+        End With
+        Next y
+        
+        
+'Appraisl WAIVED email
+
+       Sheets("Appraisal WAIVED").Select
+            Dim pr As Long
+            pr = Cells(Rows.Count, "A").End(xlUp).Row
+            For q = 4 To pr
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & "Moe’s UPDATE – Client appraisal waiver inside" & Range("AL1") & " - " & Range("C" & q).Value
+            .To = Range("T" & q).Value & ";" & Range("P" & q)
+            .cc = Range("W" & q)
+            .body = "DELETE THIS AND SEND THE APPRAISAL WAIVED EMAIL"
+            .display
+        End With
+        Next q
+
+'Closing Discclosure sent email
+            
+            Sheets("Closing disclosure sent").Select
+            Dim kr As Long
+            kr = Cells(Rows.Count, "A").End(xlUp).Row
+            For Z = 4 To kr
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL5") & "Closing [Disclosure] Time" & Range("AL5") & " - " & Range("c" & Z).Value
+            .To = Range("T" & Z).Value & ";" & Range("P" & Z)
+            .cc = Range("W" & Z)
+            .body = "DELETE THIS AND SEND THE CLOSING DISCLOSUE EMAIL "
+            .display
+            
+           End With
+           Next Z
+           
+'Share the love email
+            
+            Sheets("Share the love").Select
+            Dim vr As Long
+            vr = Cells(Rows.Count, "A").End(xlUp).Row
+            For C = 4 To vr
+
+        With Mail_Object.createitem(o)
+        .Subject = Range("AL1") & Range("AL2") & "Join the MortgageCountry Moe Pride" & Range("AL2") & Range("AL1") & " - " & Range("c" & C).Value
+            .To = Range("T" & C).Value & ";" & Range("P" & C)
+            .cc = Range("W" & C)
+            .body = "DELETE THIS AND SEND THE SHARE THE LOVE EMAIL "
+            .display
+End With
+Next C
+a
+        Application.DisplayAlerts = False
+Set Mail_Object = Nothing
+
+Workbooks("Emojis.xlsx").Close savechanges:=False
+
+End Sub
+
