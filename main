@@ -1,0 +1,152 @@
+
+Sub run_BE_fairvalue()
+
+Application.OnTime "05:10 :00", "BELocks_FairValue"
+
+End Sub
+
+Sub BELocks_FairValue()
+
+'Open report file
+server = "C:\Users\18458\Desktop\Dashboard Reports\"
+server2 = "C:\Users\18458\Desktop\VBA\Reports\"
+
+Dim data As Workbook
+Set data = Workbooks.Open(server & "Report.csv")
+Dim cell As Range
+Dim searchValue As Long
+
+Range("G1").Select
+ActiveCell.Formula = "=DATE(YEAR(TODAY()), MONTH(TODAY()), DAY(TODAY()))"
+
+'This sorts BE Locks
+
+    Rows("3:3").Select
+    Selection.AutoFilter
+    ActiveSheet.Range("$A$3:$CE$1176").AutoFilter Field:=3, Criteria1:="Yes"
+    ActiveSheet.Range("$A$3:$CE$1176").AutoFilter Field:=31, Criteria1:=Array( _
+        "Approved", "Condition Review", "Docs Out", "Funded", "In Underwriting", _
+        "Investor Conditions", "Loan Closed", "Loan Open", "Loan Shipped", "Loan Sold", "Loan Submitted" _
+        , "Processing", "Ready For Sale", "Registered"), Operator:=xlFilterValues
+    ActiveSheet.Range("$A$3:$CE$1176").AutoFilter Field:=74, Criteria1:= _
+        "Best Effort"
+    ActiveSheet.Range("$A$3:$CE$1176").AutoFilter Field:=9, Criteria1:=">=" & Range("G1").Value
+        
+' Copy and paste data into new sheet so we can run formula
+    Cells.Select
+    Selection.Copy
+    Sheets.Add After:=ActiveSheet
+    ActiveSheet.PasteSpecial
+    Paste = Values
+    Application.CutCopyMode = False
+    
+    'Delete the columns we don't need and add headers to our PT and fair value columns
+    
+Columns("D:H").EntireColumn.Delete
+Columns("E:J").EntireColumn.Delete
+Columns("F:S").EntireColumn.Delete
+Columns("H:AO").EntireColumn.Delete
+Columns("I:Q").EntireColumn.Delete
+Columns("J:N").EntireColumn.Delete
+Range("K3").Value = "Pull Through"
+Range("L3").Value = "BE Fair Value"
+Range("A1").Select
+'ActiveWorkbook.Save
+
+ActiveSheet.Name = "BELocks"
+
+'Open BE PT and copy/paste into rawdata
+server3 = "C:\Users\18458\Desktop\VBA\"
+
+Dim BE As Workbook
+Set BE = Workbooks.Open(server3 & "BE PT.csv")
+Sheets("BE PT").Copy Before:=Workbooks("Report.csv").Sheets(1)
+
+'Look at Raw data and run macros
+
+Sheets("BELocks").Select
+
+  'DROP FORMULAS
+ 
+ lastRow = Range("A" & Rows.Count).End(xlUp).Row
+
+' PullThrough
+
+    Range("K4").Select
+    Range("K4").Formula = "=INDEX('BE PT'!B:B,MATCH(F4,'BE PT'!A:A,0))"
+    Range("K4").AutoFill Destination:=Range("K4:K" & lastRow)
+    
+' CalculateBEValues Macro 
+    Range("L4").Select
+    ActiveCell.FormulaR1C1 = "=((RC[-3]-100)/100*RC[-7]*RC[-1])-3415+RC[-2]"
+    Range("L4").AutoFill Destination:=Range("L4:L" & lastRow)
+    
+    Dim dd As Date
+    dd = Date
+    
+Dim ws As Worksheet
+Set ws = data.Sheets("BELocks")
+    
+'Sum up LA + Fair Value and count
+
+'endrow line finds the last value in column L for our BEValue sum
+
+endrow = data.Sheets("BELocks").Cells(Rows.Count, 12).End(xlUp).Row
+
+'Pipeline_size
+data.Sheets("BELocks").Range("E" & endrow + 2) = WorksheetFunction.Sum(data.Sheets("BELocks").Range("E4:E" & endrow))
+data.Sheets("BELocks").Range("E" & endrow + 2).Value = FormatCurrency(Range("E" & endrow + 2))
+data.Sheets("BELocks").Range("E" & endrow + 2).Font.Bold = True
+data.Sheets("BELocks").Range("E" & endrow + 2).Interior.ColorIndex = 6
+
+'change L to currency
+    Dim rng As Range
+    Set rng = ActiveSheet.Range("L4:L" & endrow)
+    rng.NumberFormat = "$#,##0.00" ' Currency format with 2 decimal places
+
+'Count
+'Dim endrow As Long
+Dim startRow As Long
+
+startRow = 4
+
+' Your existing code to find the last used row in column 12 (L)
+'endrow = data.Sheets("BELocks").Cells(Rows.Count, 12).End(xlUp).Row
+
+' Calculate the number of rows
+Dim rowCount As Long
+rowCount = endrow - startRow + 1
+
+data.Sheets("BELocks").Range("C" & endrow + 2).Value = rowCount
+ActiveSheet.Range("B" & endrow + 2) = "Count"
+data.Sheets("BELocks").Range("C" & endrow + 2).Interior.ColorIndex = 6
+ActiveSheet.Range("C" & endrow + 2).Font.Bold = True
+
+'Weighted average
+ws.Range("I" & endrow + 2).Value = WorksheetFunction.SumProduct(ws.Range("I4:I" & endrow), ws.Range("E4:E" & endrow)) / WorksheetFunction.Sum(ws.Range("E4:E" & endrow))
+
+'Pipeline value
+data.Sheets("BELocks").Range("K" & endrow + 2) = "Total"
+data.Sheets("BELocks").Range("L" & endrow + 2) = WorksheetFunction.Sum(data.Sheets("BELocks").Range("L4:L" & endrow))
+data.Sheets("BELocks").Range("L" & endrow + 2).Value = FormatCurrency(Range("L" & endrow + 2))
+data.Sheets("BELocks").Range("L" & endrow + 2).Font.Bold = True
+data.Sheets("BELocks").Range("L" & endrow + 2).Interior.ColorIndex = 6
+
+    ' Define the value to search for
+    searchValue = -3415
+    
+    ' Loop through each cell in column L
+    For Each cell In ws.Range("L:L")
+        ' Check if the cell's value matches the search value
+        If cell.Value = searchValue Then
+            ' Apply the desired formatting
+            cell.Interior.Color = RGB(255, 192, 203) ' Light red color
+        End If
+    Next cell
+
+'Save File in Reports
+data.SaveAs (server2 & "BE Fair Value " & Format(dd, "(mm-dd-yy)") & ".xlsx"), FileFormat:=51
+    
+End Sub
+
+
