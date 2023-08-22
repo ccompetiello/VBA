@@ -1,0 +1,120 @@
+Sub Refi_Macroworkbook_Chris()
+
+'Dim dash As Workbook
+'Set dash = ActiveWorkbook
+Dim dd As Date
+dd = Date
+
+server = "C:\Users\18458\Desktop\Refi Report\"
+server2 = "C:\Users\18458\Desktop\Refi Report\Reports\"
+
+Dim data As Workbook
+Set data = Workbooks.Open(server & "RawData.csv")
+
+Columns("D:F").EntireColumn.Delete
+Columns("E:I").EntireColumn.Delete
+Columns("F:G").EntireColumn.Delete
+Columns("G").EntireColumn.Delete
+Columns("H:K").EntireColumn.Delete
+Columns("I:M").EntireColumn.Delete
+Columns("J").EntireColumn.Delete
+Columns("K:AI").EntireColumn.Delete
+Columns("L:AA").EntireColumn.Delete
+Columns("M:U").EntireColumn.Delete
+
+Range("M:Q").Copy Range("Q:S")
+
+Range("L1").Value = "Today's 30Yr Rate"
+Range("M1").Value = "7.625"
+
+Rows("2:2").Select
+    Selection.Insert Shift:=xlDown
+    Selection.Insert Shift:=xlDown
+    
+Range("L2").Value = "Today's 15Yr Rate"
+Range("M2").Value = "7.5"
+
+Range("L3").Value = "Today's 10/1 Arm Rate"
+Range("M3").Value = "7.5"
+
+Range("L1:M3").Interior.ColorIndex = 8
+Range("L1:M3").Font.Bold = True
+
+ lastRow = Range("A" & Rows.Count).End(xlUp).Row
+
+ 
+ Range("M5").Value = "Refi 30 Yr?"
+ Range("M7").Select
+ Range("M7").Formula = "=IF(AND(K7<(TODAY()-150),D7>=($M$1+0.375),LEFT(E7,2)=""30"",K7<>""""), ""Yes"", ""No"")"
+ Range("M7").AutoFill Destination:=Range("M7:M" & lastRow)
+ 
+ Range("N5").Value = "Refi 15 Yr?"
+ Range("N7").Select
+ Range("N7").Formula = "=IF(AND(K7<(TODAY()-150),D7>=($M$2+0.375),LEFT(E7,2)=""15"",K7<>""""), ""Yes"", ""No"")"
+ Range("N7").AutoFill Destination:=Range("N7:N" & lastRow)
+ 
+ Range("O5").Value = "Refi 10/1 Arm?"
+ Range("O7").Select
+ Range("O7").Formula = "=IF(AND(K7<(TODAY()-150),D7>=($M$3+0.375),LEFT(E7,2)=""10"",K7<>""""), ""Yes"", ""No"")"
+ Range("O7").AutoFill Destination:=Range("O7:O" & lastRow)
+ 
+ Range("P5").Value = "Refi All products Vs. ARM?"
+ Range("P7").Formula = "=IF(AND(K7<(TODAY()-150),D7>=($M$3+0.375),K7<>""""), ""Yes"", ""No"")"
+ Range("P7").AutoFill Destination:=Range("P7:P" & lastRow)
+ 
+ Range("T5").Value = "Old P&I"
+ Range("T7").Formula = "=PMT(D7/12/100,30*12,-F7)"
+ Range("T7").AutoFill Destination:=Range("T7:T" & lastRow)
+ 
+ Range("U5").Value = "New P&I"
+ Range("U7").Formula = "=PMT($M$1/12/100,30*12,-F7)"
+ Range("U7").AutoFill Destination:=Range("U7:U" & lastRow)
+ 
+ Range("V5").Value = "Projected Savings"
+ Range("V7").Formula = "=T7-U7"
+ Range("V7").AutoFill Destination:=Range("V7:V" & lastRow)
+ 
+ 
+ 'this is for 30 yr
+ Range("K5").Select
+ Selection.AutoFilter
+ ActiveSheet.Range("$A$1:$M$5000").AutoFilter Field:=11, Criteria1:="<>"
+ ActiveSheet.Range("$A$4:$M$1334").AutoFilter Field:=3, Criteria1:="Yes"
+ ActiveSheet.Range("$A$4:$M$1334").AutoFilter Field:=13, Criteria1:="Yes"
+ 
+ ' turn green
+    Columns("M:P").Select
+    Selection.FormatConditions.Add Type:=xlCellValue, Operator:=xlEqual, _
+        Formula1:="=""YES"""
+    Selection.FormatConditions(Selection.FormatConditions.Count).SetFirstPriority
+    With Selection.FormatConditions(1).Font
+        .Color = -16752384
+        .TintAndShade = 0
+    End With
+    With Selection.FormatConditions(1).Interior
+        .PatternColorIndex = xlAutomatic
+        .Color = 13561798
+        .TintAndShade = 0
+    End With
+    Selection.FormatConditions(1).StopIfTrue = False
+ 
+    Columns("M:P").Select
+    Selection.FormatConditions.Add Type:=xlCellValue, Operator:=xlEqual, _
+        Formula1:="=""NO"""
+    Selection.FormatConditions(Selection.FormatConditions.Count).SetFirstPriority
+    With Selection.FormatConditions(1).Font
+        .Color = -16383844
+        .TintAndShade = 0
+    End With
+    With Selection.FormatConditions(1).Interior
+        .PatternColorIndex = xlAutomatic
+        .Color = 13551615
+        .TintAndShade = 0
+    End With
+    Selection.FormatConditions(1).StopIfTrue = False
+
+'Save File in Reports
+data.SaveAs (server2 & "Refi Report " & Format(dd, "(mm-dd-yy)") & ".xlsx"), FileFormat:=51
+
+
+End Sub
