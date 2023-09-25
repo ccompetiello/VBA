@@ -1,0 +1,67 @@
+Sub QuarterlyTotal()
+    
+    Application.DisplayAlerts = False
+
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim targetYear As Integer 
+    Dim myMonth As Integer
+    Dim monthly_vol(6 To 8) As Double
+    Dim total_vol As Double
+    
+    Dim server As String
+    server = "C:\Users\18458\Desktop\Dashboard Reports\"
+    
+    ' Open the workbook
+    Dim data As Workbook
+    Set data = Workbooks.Open(server & "Report.csv")
+    Set ws = ActiveSheet
+    
+    ' Set the year for Q3
+    targetYear = 2023
+    
+    ' Find the last row with data in column A (Closed Date)
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    
+    ' Initialize total_vol
+    total_vol = 0
+    
+    ' Loop through the data and calculate monthly and Q3 totals
+    For myMonth = 6 To 8 ' Use "myMonth" instead of "month"
+        Dim i As Long
+        monthly_vol(myMonth) = 0
+
+        For i = 5 To lastRow
+            Dim closedDate As Date
+            Dim loanAmount As Double
+            Dim loanStatus As String
+            
+
+            ' Read data from the worksheet
+            closedDate = ws.Cells(i, 57).Value
+            loanAmount = CDbl(Replace(ws.Cells(i, 16).Value, ",", ""))
+            loanStatus = ws.Cells(i, 31).Value
+
+            ' Check if the record is in the specified month and year
+            If targetYear = year(closedDate) And myMonth = month(closedDate) And _
+               loanStatus <> "Loan Canceled" And loanStatus <> "Loan Denied" And loanStatus <> "Loan Withdrawn" Then
+                monthly_vol(myMonth) = monthly_vol(myMonth) + loanAmount
+            End If
+        Next i
+
+        ' Add the monthly volume to the total
+        total_vol = total_vol + monthly_vol(myMonth)
+    Next myMonth
+
+    ' Display the monthly volumes
+    For myMonth = 6 To 8 ' 
+        Debug.Print "Month " & myMonth & ": " & monthly_vol(myMonth)
+    Next myMonth
+
+    ' Display the Q3 total
+    Debug.Print "Q3 total: " & total_vol
+    
+    Application.DisplayAlerts = True
+End Sub
+
+
