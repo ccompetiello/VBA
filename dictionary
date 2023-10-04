@@ -1,0 +1,47 @@
+Sub InitializeDictionary()
+  
+  Dim dict As Dictionary
+  Set dict = ReadData
+  
+  Call ReadData
+  Call PrintDictionary(dict, "Investor volume")
+ 
+End Sub
+
+Private Function ReadData() As Dictionary
+
+    'Debug.Print "ReadData()"
+    
+    Dim dict As New Dictionary
+    
+    Dim rg As Range
+    Set rg = shData.Range("A1").CurrentRegion
+    
+    Dim inv As String, volume As Long
+    
+    Dim i As Long
+    
+    For i = 5 To rg.Rows.Count
+        inv = rg.Cells(i, 67).Value
+        volume = rg.Cells(i, 16).Value
+        dict(inv) = dict(inv) + volume
+        
+    Next i
+    
+    Set ReadData = dict
+
+
+End Function
+
+Public Sub PrintDictionary(ByVal dict As Dictionary, ByVal headerText As String)
+
+    Debug.Print vbNewLine & headerText
+    
+    
+    Dim key As Variant
+    For Each key In dict
+        Debug.Print key, dict(key)
+    Next key
+
+
+End Sub
