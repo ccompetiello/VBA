@@ -1,0 +1,58 @@
+Sub send_email()
+
+    Dim Emailapp As Outlook.Application
+    Dim newemailitem As Outlook.MailItem
+    Dim src As String
+  
+    Set Emailapp = New Outlook.Application
+    Set newemailitem = Emailapp.CreateItem(olMailItem)
+    
+    'Set the To list and Subject
+    newemailitem.To = ""
+    newemailitem.CC = ""
+    newemailitem.Subject = "" & Date
+
+    
+    'set the file path
+    Dim folderPath As String
+    folderPath = ""
+    Dim latestFile As String
+    latestFile = GetLatestFile(folderPath)
+    
+    If latestFile <> "" Then
+        newemailitem.Attachments.Add latestFile
+    Else
+        MsgBox "No attachment found in the folder.", vbExclamation
+    End If
+    
+    'display the email
+    newemailitem.Display True
+
+    Set newemailitem = Nothing
+    Set Emailapp = Nothing
+    
+End Sub
+    
+    Function GetLatestFile(folderPath As String) As String
+    Dim latestFile As String
+    Dim latestDate As Date
+    latestDate = DateSerial(1900, 1, 1) ' Initialize with a very old date
+    
+    Dim fileName As String
+    fileName = Dir(folderPath & "\*.*", vbNormal)
+    
+    Do While fileName <> ""
+        Dim fileDate As Date
+        fileDate = FileDateTime(folderPath & "\" & fileName)
+        
+        If fileDate > latestDate Then
+            latestDate = fileDate
+            latestFile = folderPath & "\" & fileName
+        End If
+        
+        fileName = Dir ' Get next file
+    Loop
+    
+    GetLatestFile = latestFile
+
+End Function
