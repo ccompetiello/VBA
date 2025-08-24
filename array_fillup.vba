@@ -1,4 +1,3 @@
-Sub variant_array()
 
 Dim quant() As Variant
 Dim lastRow As Long
@@ -8,8 +7,8 @@ Dim r As Long
     lastRow = Range("E" & Rows.Count).End(xlUp).Row
     quant = Range("E6:E" & lastRow).Value
     
-    For i = 1 To UBound(quant, 1)
-    Next i
+'    For i = 1 To UBound(quant, 1)
+'    Next i
     
     For r = 1 To UBound(quant)
     
@@ -19,6 +18,7 @@ Dim r As Long
     
 'write back to column
 
-Range("F6:F" & lastRow).Value = quant
+Range("G6:G" & lastRow).Value = quant
 
 End Sub
+
