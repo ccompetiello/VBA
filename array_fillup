@@ -1,0 +1,14 @@
+Sub variant_array()
+
+Dim quant() As Variant
+Dim lastRow As Long
+Dim i As Long
+    
+    lastRow = Range("E" & Rows.Count).End(xlUp).Row
+    quant = Range("E6:E" & lastRow).Value
+    
+    For i = 1 To UBound(quant, 1)
+    Next i
+
+
+End Sub
